@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
 
 class User(AbstractUser):
     username = models.CharField(max_length=100, unique=True, blank=False, null=False)
     email = models.EmailField(unique=True, null=False, blank=False)
     full_name = models.CharField(max_length=200)
-    otp = models.IntegerField(unique=True)
+    otp = models.IntegerField(unique=True, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -39,3 +40,14 @@ class Profile(models.Model):
         if self.full_name == "" or self.full_name == None:
             self.full_name = self.user.username
         super(Profile, self).save(*args, **kwargs) 
+
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+def save_user_profile(sender, instance, **kwarges):
+    instance.profile.save()
+
+post_save.connect(create_user_profile, sender=User)
+post_save.connect(save_user_profile, sender=User)
