@@ -16,10 +16,26 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         email_username, full_name = self.email.split('@')
         if self.full_name == "" or self.full_name == None:
-            self.full_name == email_username
+            self.full_name = email_username
         if self.username == "" or self.username == None:
             self.usernam = email_username
         super(User, self).save(*args, **kwargs)
 
 class Profile(models.Model):
-    pass
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="user_folder", default="default_user.png", null=True, blank=True)
+    full_name = models.CharField(max_length=200)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    about = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.full_name:
+            return str(self.full_name)
+        else:
+            return str(self.user.full_name)
+
+    def save(self, *args, **kwargs):
+        if self.full_name == "" or self.full_name == None:
+            self.full_name = self.user.username
+        super(Profile, self).save(*args, **kwargs) 
