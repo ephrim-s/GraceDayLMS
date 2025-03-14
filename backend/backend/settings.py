@@ -176,3 +176,4 @@ JAZZMIN_UI_TWEAKS = {
     }
 }
 
+AUTH_USER_MODEL = 'userauths.User'
