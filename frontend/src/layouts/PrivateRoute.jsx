@@ -7,3 +7,4 @@ const PrivateRoute = ({children}) => {
     return loggedIn? <>{children}</> : <Navigate to='/login/' />;
 };
 export default PrivateRoute;
+
