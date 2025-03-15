@@ -1,10 +1,29 @@
-import React from 'react'
-import BaseHeader from '../partials/BaseHeader'
-import BaseFooter from '../partials/BaseFooter'
-import { Link } from 'react-router-dom'
+import {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+
+import apiInstance from '../../utils/axios';
+import { register } from '../../utils/auth';
+import BaseHeader from '../partials/BaseHeader';
+import BaseFooter from '../partials/BaseFooter';
 
 
 function Register() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log("Submitting registration form:", fullName, email);
+    const result = await register(fullName, email, password, password2);
+    console.log("Registration result:", result);
+    setIsLoading(false);
+  };
+   
+
   return (
     <>
       <BaseHeader />
@@ -24,17 +43,18 @@ function Register() {
                   </span>
                 </div>
                 {/* Form */}
-                <form className="needs-validation" noValidate="">
+                <form className="needs-validation" noValidate="" onSubmit={handleSubmit}>
                   {/* Username */}
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">Full Name</label>
                     <input
                       type="text"
                       id="full_name"
-                      className="form-control"
+                      className="form-control" 
                       name="full_name"
                       placeholder="John Doe"
                       required=""
+                      onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
@@ -46,6 +66,7 @@ function Register() {
                       name="email"
                       placeholder="johndoe@gmail.com"
                       required=""
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   
@@ -59,17 +80,19 @@ function Register() {
                       name="password"
                       placeholder="**************"
                       required=""
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Confirm Password</label>
+                    <label htmlFor="password2" className="form-label">Confirm Password</label>
                     <input
                       type="password"
-                      id="password"
+                      id="password2"
                       className="form-control"
-                      name="password"
+                      name="password2"
                       placeholder="**************"
                       required=""
+                      onChange={(e) => setPassword2(e.target.value)}
                     />
                   </div>
                   <div>
