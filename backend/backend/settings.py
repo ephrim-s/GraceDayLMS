@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+from environs import Env
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -186,6 +189,8 @@ JAZZMIN_UI_TWEAKS = {
 }
 
 AUTH_USER_MODEL = 'userauths.User'
+
+MAILGUN_SECRET_KEY = env("MAILGUN_SECRET_KEY")
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
