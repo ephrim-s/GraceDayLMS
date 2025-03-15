@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'anymail',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -191,6 +193,16 @@ JAZZMIN_UI_TWEAKS = {
 AUTH_USER_MODEL = 'userauths.User'
 
 MAILGUN_SECRET_KEY = env("MAILGUN_SECRET_KEY")
+MAILERESEND_API_TOKEN = env("MAILERESEND_API_TOKEN")
+MAILGUN_SENDER_DOMAIN = env("MAILGUN_SENDER_DOMAIN")
+
+ANYMAIL = {
+    "MAILGUN_SECRET_KEY":env("MAILGUN_SECRET_KEY"),
+    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_SENDER_DOMAIN")
+}
+
+FROM_EMAIL = env("FROM_EMAIL")
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
